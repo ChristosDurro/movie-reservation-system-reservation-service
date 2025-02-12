@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.cdurro.dto.SeatAvailabilityDTO;
 import com.cdurro.model.Seat;
 
 @FeignClient("SEAT-SERVICE")
@@ -17,9 +16,6 @@ public interface SeatClient {
 	
 	@PostMapping("/seats/multiple")
 	public ResponseEntity<List<Seat>> getMultipleSeats(@RequestBody List<Long> scheduleIds);
-	
-	@PutMapping("/seats/update/multiple")
-	public ResponseEntity<List<Seat>> updateMultipleSeats(@RequestBody SeatAvailabilityDTO body);
 
 	@PutMapping("/seats/availability/reset/{id}")
 	public Seat resetSeatAvailability(@PathVariable Long id);

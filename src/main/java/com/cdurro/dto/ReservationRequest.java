@@ -2,19 +2,20 @@ package com.cdurro.dto;
 
 import java.util.List;
 
+import com.cdurro.model.Seat;
 import com.cdurro.model.Ticket;
 
 public class ReservationRequest {
 	
-	private UserDTO user;
+	private Long userId;
 	private List<Ticket> ticketsList;
-	private SeatAvailabilityDTO seats;
+	private List<Seat> seats;
 	
-	public UserDTO getUser() {
-		return user;
+	public Long getUserId() {
+		return userId;
 	}
-	public void setUser(UserDTO user) {
-		this.user = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	public List<Ticket> getTicketsList() {
 		return ticketsList;
@@ -22,14 +23,14 @@ public class ReservationRequest {
 	public void setTicketsList(List<Ticket> ticketsList) {
 		this.ticketsList = ticketsList;
 	}
-	public SeatAvailabilityDTO getSeats() {
+	public List<Seat> getSeats() {
 		return seats;
 	}
-	public void setSeats(SeatAvailabilityDTO seats) {
+	public void setSeats(List<Seat> seats) {
 		this.seats = seats;
 	}
 	@Override
 	public String toString() {
-		return "ReservationRequest [user=" + user + ", ticketsList=" + ticketsList + ", seats=" + seats + "]";
+		return "ReservationRequest [userId=" + userId + ", ticketsList=" + ticketsList + ", seats=" + seats + "]";
 	}
 }

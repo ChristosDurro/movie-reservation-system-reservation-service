@@ -1,7 +1,6 @@
 package com.cdurro.model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Schedule {
 	private Long id;

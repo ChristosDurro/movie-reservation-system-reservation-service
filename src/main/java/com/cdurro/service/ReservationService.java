@@ -20,7 +20,6 @@ import com.cdurro.dto.ReservationCancelationResponse;
 import com.cdurro.dto.ReservationRequest;
 import com.cdurro.dto.ReservationResponse;
 import com.cdurro.dto.ReservedMovieResponse;
-import com.cdurro.dto.SeatAvailabilityDTO;
 import com.cdurro.dto.UserDTO;
 import com.cdurro.model.Movie;
 import com.cdurro.model.Schedule;
@@ -47,47 +46,17 @@ public class ReservationService {
 	private ScheduleClient scheduleClient;
 
 	public ResponseEntity<ReservationResponse> createBooking(ReservationRequest request) {
-		System.out.println("reservation called");
+
 		try {
 			
-			ReservationResponse res = new ReservationResponse();
-			
-			System.out.println("Reached 1");
-			
-			// 1. Create Tickets
-			List<Ticket> tickets = ticketClient.createTickets(request.getTicketsList()).getBody();
+			ReservationResponse res = new ReservationResponse();			
 
-			System.out.println("Reached 2");
-			// 2. Update Seats availability
-			SeatAvailabilityDTO seatAvailabilityDTO = new SeatAvailabilityDTO();
-			
-			seatAvailabilityDTO.setSeatIdsToUpdate(request.getSeats().getSeatIdsToUpdate());
-			seatAvailabilityDTO.setAvailability(request.getSeats().getAvailability());
-			
-			List<Seat> seats = seatClient.updateMultipleSeats(seatAvailabilityDTO).getBody();
-			
-
-			System.out.println("Reached 3");
-			// 3. Update User Ticket List
-			UserDTO userDto = new UserDTO(
-					request.getUser().getId(),
-					request.getUser().getFirstName(),
-					request.getUser().getLastName(),
-					request.getUser().getUsername(),
-					request.getUser().getEmail()
-			);
-
-			System.out.println("Reached 3.5");
-			userClient.updateUser(userDto.getId(), userDto);
-
-			System.out.println("Reached 4");
 			res.setSuccess(true);
 			res.setMessage("Reservation successful");
-			res.setTicketIds(tickets.stream().map(Ticket::getId).toList());
-			res.setSeatIds(seats.stream().map(Seat::getId).toList());
-			res.setUserId(userDto.getId());
+			res.setTicketIds(request.getTicketsList().stream().map(Ticket::getId).toList());
+			res.setSeatIds(request.getSeats().stream().map(Seat::getId).toList());
+			res.setUserId(request.getUserId());
 
-			System.out.println("Reached 5");
 			return ResponseEntity.ok(res);
 		}
 		catch (Exception e) {
@@ -137,8 +106,6 @@ public class ReservationService {
 		
 		ticketClient.deleteTicket(request.getTicketId());
 		
-		List<Ticket> tickets = ticketClient.getAllTicketsByUser(request.getUserId()).getBody();
-		
 		UserDTO userDto = new UserDTO(
 				user.getId(),
 				user.getFirstName(),
@@ -146,8 +113,6 @@ public class ReservationService {
 				user.getUsername(),
 				user.getEmail()
 		);
-		
-		userClient.updateUser(userDto.getId(), userDto);
 		
 		ReservationCancelationResponse response = new ReservationCancelationResponse();
 		
